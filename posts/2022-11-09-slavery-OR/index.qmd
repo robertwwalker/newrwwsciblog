@@ -6,6 +6,10 @@ categories: [R, tidyverse]
 image: "image.jpg"
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message=FALSE, cache = TRUE)
+```
+
 Last update: November 15. 2022
 
 In preparation for the dumpster fire that is Oregon election reporting, I previously posed on importing a directory of .csv files.  At present, that is what I can find to build this.  What does the interface look like?

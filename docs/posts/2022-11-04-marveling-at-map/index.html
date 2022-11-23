@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="RWW">
+<meta name="dcterms.date" content="2022-11-04">
+
+<title>rww.science-blog - Marveling at map()</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rww.science-blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Marveling at map()</h1>
+            <p class="subtitle lead">Celebrating map</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>RWW </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 4, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><strong>I want to learn about map and begin to replace my use of apply for everything.</strong></p>
+<p>Goal: import a directory full of csv files.</p>
+<p>Method. First, load <code>purrr</code> and the <code>tidyverse</code> and then create a tibble for the <em>filenames</em> because we are creating the example. <code>map</code> wants to output a list so I have to unlist it into the tibble.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a set of filenames</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fnames <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">filenames=</span><span class="fu">unlist</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span><span class="fu">paste0</span>(<span class="st">"file"</span>,.x,<span class="st">".csv"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      )))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>fnames</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 1
+  filenames
+  &lt;chr&gt;    
+1 file1.csv
+2 file2.csv
+3 file3.csv
+4 file4.csv
+5 file5.csv</code></pre>
+</div>
+</div>
+<section id="create-the-files" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-files">Create the files</h2>
+<p>Now I need to create some files in a given directory. I have created a directory called <em>fakedata</em>.</p>
+<pre><code>dir.create("fakedata")</code></pre>
+<p>Now I want to write the data to the directory to conclude the reproducible example. In this case, there are five csv files.</p>
+<pre><code>walk(fnames$filenames, 
+     ~ write.csv(data.frame(x1=rnorm(10),x2=rnorm(10)),       file = paste0("./fakedata/",.x, sep="")))</code></pre>
+<p>That seems to work.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/Screen Shot 2022-11-04 at 12.58.16 PM.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Photo of success</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="loading-the-files" class="level2">
+<h2 class="anchored" data-anchor-id="loading-the-files">Loading the files</h2>
+<p>Though I already know the names of the files, in most cases, I would need to collect them. In this particular case, <code>dir()</code> will come in very handy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir</span>(<span class="st">"fakedata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "file1.csv" "file2.csv" "file3.csv" "file4.csv" "file5.csv"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>file.names <span class="ot">&lt;-</span> <span class="fu">dir</span>(<span class="st">"fakedata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s take those and load the files. We will combine <code>read.csv</code> with <code>map</code> to get a list containing all of the files.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>read.files <span class="ot">&lt;-</span> file.names <span class="sc">%&gt;%</span> <span class="fu">map</span>(., <span class="sc">~</span> <span class="fu">read.csv</span>(<span class="fu">paste0</span>(<span class="st">"fakedata/"</span>,.x, <span class="at">sep=</span><span class="st">""</span>)))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>read.files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+    X          x1          x2
+1   1 -1.38001285 -1.22636540
+2   2  0.18200309 -0.47330201
+3   3  0.38672920  0.32228012
+4   4  1.59951536  0.17438280
+5   5  0.04066402 -2.17050573
+6   6 -0.25814383  0.35882778
+7   7 -1.09942888  0.05209077
+8   8 -0.96198031 -0.31535964
+9   9 -0.71146188 -0.88743843
+10 10 -0.90768963 -1.64463965
+
+[[2]]
+    X          x1          x2
+1   1 -0.93160098  0.38577793
+2   2 -1.11500843 -2.28599247
+3   3  0.48695836 -0.38091065
+4   4  0.43833164  1.94491090
+5   5  1.38558361  0.29454227
+6   6 -0.08697636  0.14269709
+7   7  1.32351741  0.29570675
+8   8 -0.51831633 -1.07216871
+9   9 -0.51175809  0.01959317
+10 10  0.89500573 -1.03716777
+
+[[3]]
+    X         x1          x2
+1   1 -0.8834481 -0.25006254
+2   2  1.0708784 -1.36573365
+3   3  0.3286340 -0.10929292
+4   4  1.2088226 -0.04355173
+5   5 -0.5257318 -0.47974675
+6   6  3.0484664 -0.32511134
+7   7 -0.2252273  1.23925377
+8   8  1.0458161 -1.18513179
+9   9  0.3243315  1.44062060
+10 10  0.8238747 -1.53231879
+
+[[4]]
+    X         x1          x2
+1   1  0.8460534  0.08150364
+2   2 -0.3220720  1.07239215
+3   3  1.3478005  1.18462705
+4   4  0.9222565  1.16223158
+5   5  1.1380822  1.05890088
+6   6  0.6123547 -1.46789361
+7   7 -0.2974722 -0.37149873
+8   8  1.0321546  0.15357759
+9   9 -0.3445316 -0.95253704
+10 10 -0.1112015 -0.64225964
+
+[[5]]
+    X          x1          x2
+1   1 -1.15093999  0.54168693
+2   2  0.35413293 -0.09396014
+3   3 -1.26696402  0.25582265
+4   4  0.06712394  1.23749986
+5   5  0.53648590  0.37711498
+6   6 -1.29457309  0.23440024
+7   7  0.44966760  0.45751493
+8   8 -0.42755728  0.89952539
+9   9 -0.06584558  0.09520603
+10 10 -0.50046918 -0.16258746</code></pre>
+</div>
+</div>
+<p>Let me stick the filenames on the list elements. This allows any individual one to be addressed in a relatively intuitive way. I show an example by calculating the mean of x1 in the third dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>clean.files <span class="ot">&lt;-</span> read.files</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(clean.files) <span class="ot">&lt;-</span> file.names</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>clean.files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$file1.csv
+    X          x1          x2
+1   1 -1.38001285 -1.22636540
+2   2  0.18200309 -0.47330201
+3   3  0.38672920  0.32228012
+4   4  1.59951536  0.17438280
+5   5  0.04066402 -2.17050573
+6   6 -0.25814383  0.35882778
+7   7 -1.09942888  0.05209077
+8   8 -0.96198031 -0.31535964
+9   9 -0.71146188 -0.88743843
+10 10 -0.90768963 -1.64463965
+
+$file2.csv
+    X          x1          x2
+1   1 -0.93160098  0.38577793
+2   2 -1.11500843 -2.28599247
+3   3  0.48695836 -0.38091065
+4   4  0.43833164  1.94491090
+5   5  1.38558361  0.29454227
+6   6 -0.08697636  0.14269709
+7   7  1.32351741  0.29570675
+8   8 -0.51831633 -1.07216871
+9   9 -0.51175809  0.01959317
+10 10  0.89500573 -1.03716777
+
+$file3.csv
+    X         x1          x2
+1   1 -0.8834481 -0.25006254
+2   2  1.0708784 -1.36573365
+3   3  0.3286340 -0.10929292
+4   4  1.2088226 -0.04355173
+5   5 -0.5257318 -0.47974675
+6   6  3.0484664 -0.32511134
+7   7 -0.2252273  1.23925377
+8   8  1.0458161 -1.18513179
+9   9  0.3243315  1.44062060
+10 10  0.8238747 -1.53231879
+
+$file4.csv
+    X         x1          x2
+1   1  0.8460534  0.08150364
+2   2 -0.3220720  1.07239215
+3   3  1.3478005  1.18462705
+4   4  0.9222565  1.16223158
+5   5  1.1380822  1.05890088
+6   6  0.6123547 -1.46789361
+7   7 -0.2974722 -0.37149873
+8   8  1.0321546  0.15357759
+9   9 -0.3445316 -0.95253704
+10 10 -0.1112015 -0.64225964
+
+$file5.csv
+    X          x1          x2
+1   1 -1.15093999  0.54168693
+2   2  0.35413293 -0.09396014
+3   3 -1.26696402  0.25582265
+4   4  0.06712394  1.23749986
+5   5  0.53648590  0.37711498
+6   6 -1.29457309  0.23440024
+7   7  0.44966760  0.45751493
+8   8 -0.42755728  0.89952539
+9   9 -0.06584558  0.09520603
+10 10 -0.50046918 -0.16258746</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>clean.files<span class="sc">$</span>file3.csv <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">mean</span>(x1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   mean(x1)
+1 0.6216417</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(read.files[[<span class="dv">3</span>]]<span class="sc">$</span>x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6216417</code></pre>
+</div>
+</div>
+<p>If every spreadsheet happened to be the same, as these are, then we could also stack them. There is a danger to the renaming because of the way it works with unlist. Sticking with the original file, they are straightforward to stack using <code>map_dfr()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>stacked.files <span class="ot">&lt;-</span> file.names <span class="sc">%&gt;%</span> <span class="fu">map_dfr</span>(., <span class="sc">~</span> <span class="fu">read.csv</span>(<span class="fu">paste0</span>(<span class="st">"fakedata/"</span>,.x, <span class="at">sep=</span><span class="st">""</span>)))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>stacked.files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    X          x1          x2
+1   1 -1.38001285 -1.22636540
+2   2  0.18200309 -0.47330201
+3   3  0.38672920  0.32228012
+4   4  1.59951536  0.17438280
+5   5  0.04066402 -2.17050573
+6   6 -0.25814383  0.35882778
+7   7 -1.09942888  0.05209077
+8   8 -0.96198031 -0.31535964
+9   9 -0.71146188 -0.88743843
+10 10 -0.90768963 -1.64463965
+11  1 -0.93160098  0.38577793
+12  2 -1.11500843 -2.28599247
+13  3  0.48695836 -0.38091065
+14  4  0.43833164  1.94491090
+15  5  1.38558361  0.29454227
+16  6 -0.08697636  0.14269709
+17  7  1.32351741  0.29570675
+18  8 -0.51831633 -1.07216871
+19  9 -0.51175809  0.01959317
+20 10  0.89500573 -1.03716777
+21  1 -0.88344806 -0.25006254
+22  2  1.07087838 -1.36573365
+23  3  0.32863403 -0.10929292
+24  4  1.20882258 -0.04355173
+25  5 -0.52573184 -0.47974675
+26  6  3.04846641 -0.32511134
+27  7 -0.22522727  1.23925377
+28  8  1.04581612 -1.18513179
+29  9  0.32433151  1.44062060
+30 10  0.82387468 -1.53231879
+31  1  0.84605339  0.08150364
+32  2 -0.32207204  1.07239215
+33  3  1.34780048  1.18462705
+34  4  0.92225652  1.16223158
+35  5  1.13808219  1.05890088
+36  6  0.61235469 -1.46789361
+37  7 -0.29747222 -0.37149873
+38  8  1.03215455  0.15357759
+39  9 -0.34453156 -0.95253704
+40 10 -0.11120152 -0.64225964
+41  1 -1.15093999  0.54168693
+42  2  0.35413293 -0.09396014
+43  3 -1.26696402  0.25582265
+44  4  0.06712394  1.23749986
+45  5  0.53648590  0.37711498
+46  6 -1.29457309  0.23440024
+47  7  0.44966760  0.45751493
+48  8 -0.42755728  0.89952539
+49  9 -0.06584558  0.09520603
+50 10 -0.50046918 -0.16258746</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
