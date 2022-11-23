@@ -1,5 +1,5 @@
 ---
-title: "newrwwsciblog"
+title: "rww.science/blog"
 listing:
   contents: posts
   sort: "date desc"
